@@ -1,63 +1,54 @@
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.forms import AuthenticationForm
 from django.db import IntegrityError
-from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.urls import reverse
+from django.views import View
 
-from .models import User
-
-
-def index(request):
-    return render(request, "network/index.html")
+from .forms import UserRegistrationForm
 
 
-def login_view(request):
-    if request.method == "POST":
+class IndexView(View):
+    def get(self, request):
+        return render(request, "network/index.html")
 
-        # Attempt to sign user in
-        username = request.POST["username"]
-        password = request.POST["password"]
-        user = authenticate(request, username=username, password=password)
 
-        # Check if authentication successful
-        if user is not None:
+class LoginView(View):
+    def get(self, request):
+        form = AuthenticationForm()
+        return render(request, "network/login.html", {"form": form})
+
+    def post(self, request):
+        form = AuthenticationForm(data=request.POST)
+        if form.is_valid():
+            user = form.get_user()
             login(request, user)
-            return HttpResponseRedirect(reverse("index"))
+            return redirect("index")
         else:
-            return render(request, "network/login.html", {
-                "message": "Invalid username and/or password."
-            })
-    else:
-        return render(request, "network/login.html")
+            return render(request, "network/login.html", {"form": form, "message": "Invalid username and/or password."})
 
 
-def logout_view(request):
-    logout(request)
-    return HttpResponseRedirect(reverse("index"))
+class LogoutView(View):
+    def post(self, request):
+        logout(request)
+        return redirect("index")
 
 
-def register(request):
-    if request.method == "POST":
-        username = request.POST["username"]
-        email = request.POST["email"]
+class RegisterView(View):
+    def get(self, request):
+        form = UserRegistrationForm()
+        return render(request, "network/register.html", {"form": form})
 
-        # Ensure password matches confirmation
-        password = request.POST["password"]
-        confirmation = request.POST["confirmation"]
-        if password != confirmation:
-            return render(request, "network/register.html", {
-                "message": "Passwords must match."
-            })
+    def post(self, request):
+        form = UserRegistrationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            username = form.cleaned_data.get("username")
+            password = form.cleaned_data.get("password1")
+            user = authenticate(username=username, password=password)
+            login(request, user)
+            return redirect("index")
+        else:
+            return render(request, "network/register.html", {"form": form})
 
-        # Attempt to create new user
-        try:
-            user = User.objects.create_user(username, email, password)
-            user.save()
-        except IntegrityError:
-            return render(request, "network/register.html", {
-                "message": "Username already taken."
-            })
-        login(request, user)
-        return HttpResponseRedirect(reverse("index"))
-    else:
-        return render(request, "network/register.html")
+
