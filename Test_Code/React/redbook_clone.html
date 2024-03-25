@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redbook Clone</title>
+    <script src="https://unpkg.com/react@17/umd/react.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+
+        .post {
+            background-color: #fff;
+            border: 1px solid #ccc;
+            margin-bottom: 20px;
+            padding: 20px;
+        }
+
+        .post-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .post-header img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        .post-content img {
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 10px;
+        }
+
+        .post-footer {
+            color: #777;
+            font-size: 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .post-footer button {
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        function Post({ username, avatarUrl, postImageUrl, caption, likes, comments }) {
+            const [liked, setLiked] = React.useState(false);
+            const [comment, setComment] = React.useState('');
+            const handleLike = () => setLiked(!liked);
+            const handleComment = (e) => setComment(e.target.value);
+
+            return (
+                <div className="post">
+                    <div className="post-header">
+                        <img src={avatarUrl} alt={`${username}'s avatar`} />
+                        <span>{username}</span>
+                    </div>
+                    <div className="post-content">
+                        <img src={postImageUrl} alt="Post" />
+                    </div>
+                    <div className="post-caption">{caption}</div>
+                    <div className="post-footer">
+                        <div>
+                            <button onClick={handleLike}>{liked ? 'Unlike' : 'Like'}</button>
+                            <span>{likes} Likes</span>
+                        </div>
+                        <div>
+                            <input type="text" placeholder="Add a comment..." value={comment} onChange={handleComment} />
+                            <button onClick={() => setComment('')}>Post</button>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        function App() {
+            const posts = [
+                { id: 1, username: 'user1', avatarUrl: 'https://via.placeholder.com/50', postImageUrl: 'https://via.placeholder.com/400x300', caption: 'A beautiful sunset!', likes: 15, comments: [] },
+                { id: 2, username: 'user2', avatarUrl: 'https://via.placeholder.com/50', postImageUrl: 'https://via.placeholder.com/400x300', caption: 'Exploring nature.', likes: 20, comments: [] },
+                // Add more posts as needed
+            ];
+
+            return (
+                <div className="container">
+                    {posts.map(post => (
+                        <Post key={post.id} username={post.username} avatarUrl={post.avatarUrl} postImageUrl={post.postImageUrl} caption={post.caption} likes={post.likes} comments={post.comments} />
+                    ))}
+                </div>
+            );
+        }
+
+        ReactDOM.render(<App />, document.getElementById('root'));
+    </script>
+</body>
+
+</html>
