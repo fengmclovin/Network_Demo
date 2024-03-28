@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TradingView-Like Page</title>
+    <script src="https://unpkg.com/react@17/umd/react.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            margin: 0;
+        }
+
+        .navigation {
+            display: flex;
+            gap: 20px;
+        }
+
+        .navigation a {
+            text-decoration: none;
+            color: #333;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+
+        .navigation a:hover {
+            color: #007bff;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 3fr;
+            gap: 20px;
+        }
+
+        .sidebar {
+            background-color: #f5f5f5;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .chart {
+            height: 400px;
+            background-color: #e0e0e0;
+            border-radius: 5px;
+        }
+
+        .news {
+            background-color: #f5f5f5;
+            padding: 10px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        function TradingViewPage() {
+            return (
+                <div className="container">
+                    <div className="header">
+                        <h1>TradingView</h1>
+                        <div className="navigation">
+                            <a href="#">Markets</a>
+                            <a href="#">Charts</a>
+                            <a href="#">Watchlist</a>
+                            <a href="#">News</a>
+                        </div>
+                    </div>
+                    <div className="main-content">
+                        <div className="sidebar">
+                            <h3>Watchlist</h3>
+                            <ul>
+                                <li>Stock 1</li>
+                                <li>Stock 2</li>
+                                <li>Stock 3</li>
+                                {/* Add more watchlist items as needed */}
+                            </ul>
+                        </div>
+                        <div className="chart">
+                            {/* Placeholder for chart */}
+                            Chart Area
+                        </div>
+                    </div>
+                    <div className="news">
+                        <h2>Latest News</h2>
+                        <ul>
+                            <li>News 1</li>
+                            <li>News 2</li>
+                            <li>News 3</li>
+                            {/* Add more news items as needed */}
+                        </ul>
+                    </div>
+                </div>
+            );
+        }
+
+        ReactDOM.render(<TradingViewPage />, document.getElementById('root'));
+    </script>
+</body>
+
+</html>
